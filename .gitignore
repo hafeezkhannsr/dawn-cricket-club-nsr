@@ -1,33 +1,10 @@
-# Dependencies
 node_modules/
-.pnp
-.pnp.js
-# Next.js
 .next/
-out/
-build/
-dist/
-# Vercel
 .vercel/
-# Env
 .env
 .env*.local
-.env.production
-.env.development
-# Local database
-data/
-# Logs
 *.log
-build-log.txt
-*.bak
-*.tmp
-# Editor
-.vscode/
-.idea/
-*.swp
-# OS
 .DS_Store
-Thumbs.db
-# TypeScript
 *.tsbuildinfo
 next-env.d.ts
+build-log.txt
