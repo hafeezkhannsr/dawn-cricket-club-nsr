@@ -3,6 +3,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Logo from "./Logo";
 import { AdminIcon, UserIcon, MenuIcon, CloseIcon } from "./Icons";
+import NotificationBell from "./NotificationBell";
 import LangToggle from "./i18n/LangToggle";
 import { useLang } from "./i18n/LangProvider";
 const NAV_ITEMS = [
@@ -38,6 +39,7 @@ export default function Navbar() {
           ))}
         </nav>
         <div className="nav-actions">
+          <NotificationBell />
           <LangToggle />
           <Link href="/admin" className="btn btn-outline" aria-label={t("nav.admin")}>
             <AdminIcon size={15} />
