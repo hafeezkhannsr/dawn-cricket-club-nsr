@@ -1,28 +1,15 @@
-import fs from "fs";
-import path from "path";
+import geoData from "./data/pakistan-geography.json";
 export type UnionCouncil = { id: string; name: string; villages: string[] };
 export type Tehsil = { id: string; name: string; unionCouncils: UnionCouncil[] };
 export type District = { id: string; name: string; tehsils: Tehsil[] };
 export type Division = { id: string; name: string; districts: District[] };
 export type Province = { id: string; name: string; divisions: Division[] };
-let cachedData: { provinces: Province[] } | null = null;
-function loadGeo(): { provinces: Province[] } {
-  if (cachedData) return cachedData;
-  try {
-    const filePath = path.join(process.cwd(), "lib", "data", "pakistan-geography.json");
-    const raw = fs.readFileSync(filePath, "utf-8");
-    cachedData = JSON.parse(raw);
-    return cachedData!;
-  } catch {
-    cachedData = { provinces: [] };
-    return cachedData;
-  }
-}
+const data = geoData as { provinces: Province[] };
 export function getProvinces(): Province[] {
-  return loadGeo().provinces;
+  return data.provinces;
 }
 export function getDivisions(provinceId: string): Division[] {
-  return getProvinces().find((p) => p.id === provinceId)?.divisions ?? [];
+  return data.provinces.find((p) => p.id === provinceId)?.divisions ?? [];
 }
 export function getDistricts(provinceId: string, divisionId: string): District[] {
   return getDivisions(provinceId).find((d) => d.id === divisionId)?.districts ?? [];
