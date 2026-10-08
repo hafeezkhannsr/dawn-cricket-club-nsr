@@ -1,50 +1,41 @@
-import geo from "./data/pakistan-geography.json";
+import fs from "fs";
+import path from "path";
 export type UnionCouncil = { id: string; name: string; villages: string[] };
 export type Tehsil = { id: string; name: string; unionCouncils: UnionCouncil[] };
 export type District = { id: string; name: string; tehsils: Tehsil[] };
 export type Division = { id: string; name: string; districts: District[] };
 export type Province = { id: string; name: string; divisions: Division[] };
-const data = geo as { provinces: Province[] };
+let cachedData: { provinces: Province[] } | null = null;
+function loadGeo(): { provinces: Province[] } {
+  if (cachedData) return cachedData;
+  try {
+    const filePath = path.join(process.cwd(), "lib", "data", "pakistan-geography.json");
+    const raw = fs.readFileSync(filePath, "utf-8");
+    cachedData = JSON.parse(raw);
+    return cachedData!;
+  } catch {
+    cachedData = { provinces: [] };
+    return cachedData;
+  }
+}
 export function getProvinces(): Province[] {
-  return data.provinces;
+  return loadGeo().provinces;
 }
 export function getDivisions(provinceId: string): Division[] {
-  return data.provinces.find((p) => p.id === provinceId)?.divisions ?? [];
+  return getProvinces().find((p) => p.id === provinceId)?.divisions ?? [];
 }
 export function getDistricts(provinceId: string, divisionId: string): District[] {
   return getDivisions(provinceId).find((d) => d.id === divisionId)?.districts ?? [];
 }
-export function getTehsils(
-  provinceId: string,
-  divisionId: string,
-  districtId: string
-): Tehsil[] {
+export function getTehsils(provinceId: string, divisionId: string, districtId: string): Tehsil[] {
   return getDistricts(provinceId, divisionId).find((d) => d.id === districtId)?.tehsils ?? [];
 }
-export function getUnionCouncils(
-  provinceId: string,
-  divisionId: string,
-  districtId: string,
-  tehsilId: string
-): UnionCouncil[] {
-  return (
-    getTehsils(provinceId, divisionId, districtId).find((t) => t.id === tehsilId)
-      ?.unionCouncils ?? []
-  );
+export function getUnionCouncils(provinceId: string, divisionId: string, districtId: string, tehsilId: string): UnionCouncil[] {
+  return getTehsils(provinceId, divisionId, districtId).find((t) => t.id === tehsilId)?.unionCouncils ?? [];
 }
-export function getVillages(
-  provinceId: string,
-  divisionId: string,
-  districtId: string,
-  tehsilId: string,
-  ucId: string
-): string[] {
-  return (
-    getUnionCouncils(provinceId, divisionId, districtId, tehsilId).find((u) => u.id === ucId)
-      ?.villages ?? []
-  );
+export function getVillages(provinceId: string, divisionId: string, districtId: string, tehsilId: string, ucId: string): string[] {
+  return getUnionCouncils(provinceId, divisionId, districtId, tehsilId).find((u) => u.id === ucId)?.villages ?? [];
 }
-/* -------- Countries (initial short list, expandable) -------- */
 export const COUNTRIES = [
   { code: "PK", name: "Pakistan" },
   { code: "IN", name: "India" },

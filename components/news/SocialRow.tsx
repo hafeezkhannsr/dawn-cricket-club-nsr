@@ -1,4 +1,4 @@
-import { SOCIAL_LINKS } from "../../lib/data/social-links";
+import { SOCIAL_LINKS } from "@/lib/data/social-links";
 export default function SocialRow({ compact = false }: { compact?: boolean }) {
   return (
     <div style={{

@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { NEWS_CATEGORIES } from "../../lib/data/news-categories";
+import { NEWS_CATEGORIES } from "@/lib/data/news-categories";
 export default function CategoryTabs() {
   const pathname = usePathname();
   return (

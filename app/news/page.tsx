@@ -2,7 +2,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CategoryTabs from "@/components/news/CategoryTabs";
 import SocialRow from "@/components/news/SocialRow";
-import { NEWS_CATEGORIES } from "../../lib/data/news-categories";
+import { NEWS_CATEGORIES } from "@/lib/data/news-categories";
 import Link from "next/link";
 export const metadata = {
   title: "Cricket News",

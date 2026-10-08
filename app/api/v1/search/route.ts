@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { listAll } from "@/lib/server/registration-store";
-import { NEWS_CATEGORIES } from "../../../../lib/data/news-categories";
+import { NEWS_CATEGORIES } from "@/lib/data/news-categories";
 export const dynamic = "force-dynamic";
 type Result = {
   type: "Player" | "Team" | "Match" | "Tournament" | "News" | "Page";
