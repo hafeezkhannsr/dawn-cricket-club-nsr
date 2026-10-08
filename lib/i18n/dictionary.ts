@@ -1,21 +1,23 @@
 export type Lang = "en" | "ur";
 export const DEFAULT_LANG: Lang = "en";
 export const DICT: Record<string, { en: string; ur: string }> = {
-  // Navbar
+  // Navigation
   "nav.home": { en: "Home", ur: "ہوم" },
   "nav.players": { en: "Players", ur: "کھلاڑی" },
   "nav.register": { en: "Register", ur: "رجسٹر" },
-  "nav.status": { en: "Status", ur: "حالت" },
   "nav.verify": { en: "Verify", ur: "تصدیق" },
   "nav.news": { en: "News", ur: "خبریں" },
+  "nav.notices": { en: "Notices", ur: "نوٹس" },
   "nav.stats": { en: "Stats", ur: "اعدادوشمار" },
   "nav.rules": { en: "Rules", ur: "قوانین" },
   "nav.about": { en: "About", ur: "تعارف" },
-  "nav.faq": { en: "FAQ", ur: "سوالات" },
   "nav.contact": { en: "Contact", ur: "رابطہ" },
-  "nav.login": { en: "Login", ur: "لاگ ان" },
   "nav.admin": { en: "Admin", ur: "ایڈمن" },
-  // Home hero
+  "nav.login": { en: "Login", ur: "لاگ ان" },
+  "nav.academy": { en: "Academy", ur: "اکیڈمی" },
+  "nav.matchCentral": { en: "Match Central", ur: "میچ سینٹرل" },
+  "nav.pcbTalent": { en: "PCB Talent Hunt", ur: "پی سی بی ٹیلنٹ ہنٹ" },
+  // Hero
   "home.eyebrow": { en: "Discipline · Skills · Teamwork", ur: "نظم و ضبط · مہارت · ٹیم ورک" },
   "home.tagline": { en: "Building Future Champions", ur: "مستقبل کے چیمپئنز کی تعمیر" },
   "home.desc": {
@@ -33,13 +35,33 @@ export const DICT: Record<string, { en: string; ur: string }> = {
   "common.next": { en: "Next", ur: "اگلا" },
   "common.back": { en: "Back", ur: "واپس" },
   "common.search": { en: "Search", ur: "تلاش" },
-  "common.filters": { en: "Filters", ur: "فلٹرز" },
+  "common.viewAll": { en: "View all", ur: "سب دیکھیں" },
+  "common.readMore": { en: "Read more", ur: "مزید پڑھیں" },
+  "common.live": { en: "LIVE", ur: "لائیو" },
+  "common.upcoming": { en: "Upcoming", ur: "آنے والے" },
+  "common.completed": { en: "Completed", ur: "مکمل" },
   "common.all": { en: "All", ur: "تمام" },
-  "common.view": { en: "View", ur: "دیکھیں" },
-  "common.refresh": { en: "Refresh", ur: "تازہ کریں" },
+  // Sections
+  "section.liveMatchCenter": { en: "Live Match Center", ur: "لائیو میچ سینٹر" },
+  "section.explore": { en: "Explore", ur: "دریافت کریں" },
+  "section.liveRightNow": { en: "Live Right Now", ur: "ابھی لائیو" },
+  "section.realTimeUpdates": { en: "Real-time Updates", ur: "حقیقی وقت کی تازہ کاری" },
+  "section.noMatchesYet": { en: "No matches yet", ur: "ابھی کوئی میچ نہیں" },
+  "section.createFirstMatch": { en: "Create your first match in the Scorer Console", ur: "اسکورر کنسول میں اپنا پہلا میچ بنائیں" },
+  "section.openScorerConsole": { en: "Open Scorer Console", ur: "اسکورر کنسول کھولیں" },
+  "section.noLiveMatches": { en: "No live matches right now", ur: "ابھی کوئی لائیو میچ نہیں" },
+  // Buttons
+  "btn.register": { en: "Register", ur: "رجسٹر" },
+  "btn.follow": { en: "Follow", ur: "فالو" },
+  "btn.following": { en: "Following", ur: "فالو کر رہے" },
+  "btn.bookNow": { en: "Book Now", ur: "ابھی بک کریں" },
   // Footer
   "footer.rights": { en: "All rights reserved.", ur: "جملہ حقوق محفوظ ہیں۔" },
   "footer.tagline": { en: "Building Future Champions", ur: "مستقبل کے چیمپئنز کی تعمیر" },
+  "footer.matchCentral": { en: "Match Central", ur: "میچ سینٹرل" },
+  "footer.club": { en: "Club", ur: "کلب" },
+  "footer.register": { en: "Register", ur: "رجسٹر" },
+  "footer.resources": { en: "Resources", ur: "ذرائع" },
 };
 export function t(key: string, lang: Lang): string {
   const entry = DICT[key];
