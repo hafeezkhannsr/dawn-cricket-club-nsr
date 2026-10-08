@@ -3,12 +3,12 @@ import Footer from "@/components/Footer";
 import Link from "next/link";
 export const metadata = { title: "Teams" };
 const TEAMS = [
-  { name: "Government High School Nowshera", short: "GHSN", city: "Nowshera", players: 15, captain: "Adnan Irshad", color: "#14a44d" },
-  { name: "Allied School Sohan Campus", short: "ASSC", city: "Rawalpindi", players: 14, captain: "Asad Khan", color: "#f0b429" },
-  { name: "Roots Garden School", short: "RGS", city: "Islamabad", players: 15, captain: "Fida Ullah", color: "#93c5fd" },
-  { name: "Govt Zakhi Qabristan Nowshera", short: "GZQN", city: "Nowshera", players: 15, captain: "Naseer Ahmad", color: "#c4b5fd" },
-  { name: "Peshawar Model School", short: "PMS", city: "Peshawar", players: 14, captain: "Wajdan Tariq", color: "#fca5a5" },
-  { name: "Beaconhouse Mardan", short: "BHM", city: "Mardan", players: 15, captain: "N. Shah", color: "#fdba74" },
+  { name: "Government High School Nowshera", short: "GHSN", slug: "ghsn", city: "Nowshera", players: 15, captain: "Adnan Irshad", color: "#14a44d" },
+  { name: "Allied School Sohan Campus", short: "ASSC", slug: "assc", city: "Rawalpindi", players: 14, captain: "Asad Khan", color: "#f0b429" },
+  { name: "Roots Garden School", short: "RGS", slug: "rgs", city: "Islamabad", players: 15, captain: "Fida Ullah", color: "#93c5fd" },
+  { name: "Govt Zakhi Qabristan Nowshera", short: "GZQN", slug: "gzqn", city: "Nowshera", players: 15, captain: "Naseer Ahmad", color: "#c4b5fd" },
+  { name: "Peshawar Model School", short: "PMS", slug: "pms", city: "Peshawar", players: 14, captain: "Wajdan Tariq", color: "#fca5a5" },
+  { name: "Beaconhouse Mardan", short: "BHM", slug: "bhm", city: "Mardan", players: 15, captain: "N. Shah", color: "#fdba74" },
 ];
 export default function TeamsPage() {
   return (
@@ -24,12 +24,12 @@ export default function TeamsPage() {
           <header style={{ marginBottom: "2rem" }}>
             <h1 style={{ margin: 0, fontSize: "clamp(1.6rem, 4vw, 2.4rem)", fontWeight: 900 }}>Teams Directory</h1>
             <p style={{ margin: ".5rem 0 0", color: "rgba(238,244,251,.65)", fontSize: ".95rem" }}>
-              {TEAMS.length} registered teams across PCB Talent Hunt tournaments
+              {TEAMS.length} registered teams — click any team to view full squad
             </p>
           </header>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1rem" }}>
             {TEAMS.map((t) => (
-              <div key={t.short} style={{ padding: "1.25rem", background: "rgba(255,255,255,.03)", border: `1px solid ${t.color}44`, borderRadius: ".9rem" }}>
+              <Link key={t.short} href={"/match-central/teams/" + t.slug} style={{ padding: "1.25rem", background: "rgba(255,255,255,.03)", border: `1px solid ${t.color}44`, borderRadius: ".9rem", textDecoration: "none", color: "inherit", display: "block", transition: "transform .15s ease" }}>
                 <div style={{ display: "flex", gap: ".85rem", alignItems: "center", marginBottom: "1rem" }}>
                   <div style={{ width: 52, height: 52, borderRadius: 999, background: `${t.color}22`, border: `1px solid ${t.color}66`, display: "grid", placeItems: "center", fontSize: "1.4rem", fontWeight: 800, color: t.color, flexShrink: 0 }}>{t.short.charAt(0)}</div>
                   <div style={{ minWidth: 0 }}>
@@ -48,7 +48,7 @@ export default function TeamsPage() {
                   </div>
                 </div>
                 <div style={{ marginTop: "1rem", fontSize: ".75rem", color: t.color, fontWeight: 700 }}>View Squad →</div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>

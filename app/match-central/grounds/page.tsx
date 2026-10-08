@@ -3,12 +3,14 @@ import Footer from "@/components/Footer";
 import Link from "next/link";
 export const metadata = { title: "Grounds" };
 const GROUNDS = [
-  { name: "DAWN Cricket Ground", city: "Hakeemabad, Nowshera", capacity: 500, pitch: "Turf", matches: 24 },
+  { name: "Abbas Cricket Ground", city: "Hakeemabad, Nowshera", capacity: 500, pitch: "Turf", matches: 32, isMain: true, note: "Home of DAWN Cricket Club" },
+  { name: "DAWN Cricket Ground", city: "Dheri Katti Khel, Nowshera", capacity: 400, pitch: "Turf", matches: 24 },
   { name: "Nowshera Cricket Ground", city: "Nowshera Kalan", capacity: 1200, pitch: "Turf", matches: 18 },
   { name: "Pabbi Sports Complex", city: "Pabbi", capacity: 800, pitch: "Turf", matches: 12 },
   { name: "Peshawar Stadium", city: "Peshawar", capacity: 5000, pitch: "Turf", matches: 8 },
   { name: "Mardan Cricket Ground", city: "Mardan", capacity: 2000, pitch: "Turf", matches: 6 },
   { name: "Rawalpindi Cricket Academy", city: "Rawalpindi", capacity: 800, pitch: "Turf", matches: 4 },
+  { name: "Islamabad Sports Complex", city: "Islamabad", capacity: 1500, pitch: "Turf", matches: 3 },
 ];
 export default function GroundsPage() {
   return (
@@ -27,8 +29,28 @@ export default function GroundsPage() {
               {GROUNDS.length} cricket venues in Khyber Pakhtunkhwa region
             </p>
           </header>
+          {/* Home ground highlight */}
+          {GROUNDS.filter((g) => g.isMain).map((g) => (
+            <div key={g.name} style={{ padding: "1.5rem", background: "linear-gradient(135deg, rgba(240,180,41,.15), rgba(20,164,77,.05))", border: "1px solid rgba(240,180,41,.4)", borderRadius: ".9rem", marginBottom: "1.5rem" }}>
+              <div style={{ display: "flex", gap: "1rem", alignItems: "center", flexWrap: "wrap" }}>
+                <div style={{ width: 72, height: 72, borderRadius: "1rem", background: "linear-gradient(135deg, #f0b429, #cb6e17)", display: "grid", placeItems: "center", fontSize: "2rem", flexShrink: 0 }}>🏏</div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <span style={{ display: "inline-block", padding: ".2rem .55rem", background: "rgba(240,180,41,.2)", color: "#f0b429", borderRadius: ".3rem", fontSize: ".62rem", fontWeight: 800, marginBottom: ".4rem" }}>★ HOME GROUND</span>
+                  <h2 style={{ margin: 0, fontSize: "clamp(1.2rem, 2.5vw, 1.6rem)", fontWeight: 900 }}>{g.name}</h2>
+                  <div style={{ fontSize: ".82rem", color: "rgba(238,244,251,.75)", marginTop: ".4rem" }}>
+                    📍 {g.city} · 👥 Capacity {g.capacity} · 🎯 {g.pitch} pitch · 🏏 {g.matches} matches
+                  </div>
+                  {g.note && <div style={{ fontSize: ".75rem", color: "#f0b429", marginTop: ".35rem", fontWeight: 700 }}>{g.note}</div>}
+                </div>
+                <a href="https://maps.google.com/?q=Hakeemabad+Nowshera+KP+Pakistan" target="_blank" rel="noopener noreferrer" className="btn btn-gold">
+                  📍 Open in Maps
+                </a>
+              </div>
+            </div>
+          ))}
+          {/* Other grounds */}
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "1rem" }}>
-            {GROUNDS.map((g) => (
+            {GROUNDS.filter((g) => !g.isMain).map((g) => (
               <div key={g.name} style={{ padding: "1.25rem", background: "rgba(255,255,255,.03)", border: "1px solid rgba(255,255,255,.08)", borderRadius: ".9rem" }}>
                 <div style={{ display: "flex", gap: ".85rem", alignItems: "center", marginBottom: ".85rem" }}>
                   <div style={{ width: 52, height: 52, borderRadius: ".7rem", background: "rgba(196,181,253,.15)", border: "1px solid rgba(196,181,253,.4)", display: "grid", placeItems: "center", fontSize: "1.5rem", flexShrink: 0 }}>🏟️</div>
