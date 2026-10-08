@@ -13,7 +13,7 @@ const TEAMS: Record<string, {
   colors: string;
   players: { num: number; name: string; role: string; age: number; batting: string; bowling: string }[];
 }> = {
-  ghsh: {
+  ghsn: {
     name: "Government High School Nowshera",
     short: "GHSN",
     city: "Nowshera",
