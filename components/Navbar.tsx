@@ -11,6 +11,7 @@ const NAV_ITEMS = [
   { href: "/register", key: "nav.register" },
   { href: "/verify", key: "nav.verify" },
   { href: "/news", key: "nav.news" },
+  { href: "/notices", key: "nav.notices" },
   { href: "/statistics", key: "nav.stats" },
   { href: "/rules", key: "nav.rules" },
   { href: "/about", key: "nav.about" },
