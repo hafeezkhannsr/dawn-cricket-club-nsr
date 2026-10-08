@@ -2,6 +2,8 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import ChatBot from "@/components/chatbot/ChatBot";
 import PwaRegister from "@/components/PwaRegister";
+import PwaInstallPrompt from "@/components/PwaInstallPrompt";
+import OfflineIndicator from "@/components/OfflineIndicator";
 import LangProvider from "@/components/i18n/LangProvider";
 export const metadata: Metadata = {
   title: {
@@ -46,6 +48,8 @@ export default function RootLayout({
           {children}
           <ChatBot />
           <PwaRegister />
+        <PwaInstallPrompt />
+        <OfflineIndicator />
         </LangProvider>
       </body>
     </html>
