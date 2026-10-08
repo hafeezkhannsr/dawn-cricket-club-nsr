@@ -5,6 +5,8 @@ import Footer from "@/components/Footer";
 import Link from "next/link";
 import LiveMatchWidget from "@/components/LiveMatchWidget";
 import LiveScoreCard from "@/components/LiveScoreCard";
+import SeoSchema from "@/components/SeoSchema";
+import { organizationSchema, websiteSchema } from "@/lib/seo/structured-data";
 import { listMatches } from "@/lib/server/match-store";
 export const dynamic = "force-dynamic";
 export default function HomePage() {
@@ -15,6 +17,7 @@ export default function HomePage() {
   const allForDisplay = [...liveMatches, ...upcomingMatches, ...recentMatches].slice(0, 6);
   return (
     <>
+      <SeoSchema data={[organizationSchema(), websiteSchema()]} />
       <Navbar />
       <main>
         <Hero />

@@ -1,5 +1,7 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import SeoSchema from "@/components/SeoSchema";
+import { faqSchema } from "@/lib/seo/structured-data";
 export const metadata = {
   title: "Frequently Asked Questions",
   description: "Answers to common questions about DAWN Cricket Club registration, fees, matches and player verification.",
@@ -49,6 +51,7 @@ const FAQS = [
 export default function FaqPage() {
   return (
     <>
+      <SeoSchema data={faqSchema(FAQS.map((f) => ({ q: f.q, a: f.a })))} />
       <Navbar />
       <main style={{ minHeight: "100vh", background: "#030a18", color: "#eef4fb", padding: "2rem 0 4rem" }}>
         <div className="container" style={{ maxWidth: 820 }}>
