@@ -1,10 +1,9 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import CategoryTabs from "@/components/news/CategoryTabs";
 import LiveNewsFeed from "@/components/news/LiveNewsFeed";
 export const metadata = {
   title: "Live Cricket News",
-  description: "Latest cricket news from public RSS sources with attribution.",
+  description: "Latest cricket news from public RSS sources — PCB, PSL, ICC, U15, U17, U19 and international cricket.",
 };
 export default function LiveNewsPage() {
   return (
@@ -17,10 +16,9 @@ export default function LiveNewsPage() {
               Live Cricket News
             </h1>
             <p style={{ margin: ".4rem 0 0", color: "rgba(238,244,251,.65)", fontSize: ".95rem" }}>
-              Aggregated from public RSS feeds with full attribution and original links
+              Pakistan, PCB, PSL, ICC, U15, U17, U19 and international cricket — auto-updated every 15 minutes
             </p>
           </header>
-          <CategoryTabs />
           <LiveNewsFeed />
           <p style={{ marginTop: "2rem", fontSize: ".75rem", color: "rgba(238,244,251,.5)", textAlign: "center", lineHeight: 1.6 }}>
             All news items link to their original source. DAWN Cricket Club does not claim ownership of
