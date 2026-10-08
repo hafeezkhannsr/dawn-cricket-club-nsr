@@ -1,0 +1,5 @@
+[33maa867e1[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m feat(PHASE 2): Match detail system - Scorecard, Ball by Ball, Squad, Stats, MVP (CricksLab-level)
+[33m8922065[m feat(PHASE 1): Tournament detail system with 6 tabs + point table + leaderboard (CricksLab-level)
+[33m7cceddd[m fix: restore globals.css (removed garbage filename artifact)
+[33m7f53d07[m chore: remove garbage filename artifacts
+[33m19e4003[m feat: premium Live Score Cards with categories
