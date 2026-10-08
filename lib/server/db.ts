@@ -1,34 +1,13 @@
 /* ============================================================
-   DAWN — Data layer
-   - LOCAL dev:     better-sqlite3 (data/dawn.db)
-   - VERCEL/prod:   in-memory fallback (or Postgres if DATABASE_URL set)
-   The KV interface never changes — only the backend.
+   DAWN — Universal Data Layer
+   - If DATABASE_URL set → Neon PostgreSQL (production)
+   - Otherwise → SQLite (local dev)
    ============================================================ */
-type KVRow = { id: string; data: string; updatedAt: string };
-/* ---------- In-memory store (production fallback) ---------- */
-declare global {
-  // eslint-disable-next-line no-var
-  var __dawn_mem__: Map<string, Map<string, KVRow>> | undefined;
-}
-function mem(): Map<string, Map<string, KVRow>> {
-  if (!globalThis.__dawn_mem__) globalThis.__dawn_mem__ = new Map();
-  return globalThis.__dawn_mem__;
-}
-function memGet(kind: string): Map<string, KVRow> {
-  const m = mem();
-  if (!m.has(kind)) m.set(kind, new Map());
-  return m.get(kind)!;
-}
-/* ---------- Detect environment ---------- */
-const isServerless =
-  !!process.env.VERCEL ||
-  !!process.env.AWS_LAMBDA_FUNCTION_NAME ||
-  !!process.env.NETLIFY;
+import { pgPut, pgGet, pgList, pgDelete, pgCount, isPostgresAvailable } from "./db-pg";
+/* ---------- SQLite (local) ---------- */
 let sqliteDb: any = null;
-/* ---------- Try to load SQLite only in local dev ---------- */
-if (!isServerless) {
+if (!isPostgresAvailable()) {
   try {
-    // Dynamic require so Vercel build does not try to bundle it
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     const Database = require("better-sqlite3");
     // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -54,15 +33,32 @@ if (!isServerless) {
     console.log("[DAWN DB] SQLite ready:", DB_PATH);
   } catch (e) {
     // eslint-disable-next-line no-console
-    console.warn("[DAWN DB] SQLite unavailable, using in-memory:", (e as Error).message);
+    console.warn("[DAWN DB] SQLite unavailable, using memory:", (e as Error).message);
     sqliteDb = null;
   }
 } else {
   // eslint-disable-next-line no-console
-  console.log("[DAWN DB] Serverless env — using in-memory store");
+  console.log("[DAWN DB] PostgreSQL mode (Neon)");
 }
-/* ---------- Public KV interface ---------- */
-export function kvPut(kind: string, id: string, data: unknown): void {
+/* ---------- In-memory fallback ---------- */
+declare global {
+  // eslint-disable-next-line no-var
+  var __dawn_mem__: Map<string, Map<string, { id: string; data: string; updatedAt: string }>> | undefined;
+}
+function mem() {
+  if (!globalThis.__dawn_mem__) globalThis.__dawn_mem__ = new Map();
+  return globalThis.__dawn_mem__;
+}
+function memGet(kind: string) {
+  const m = mem();
+  if (!m.has(kind)) m.set(kind, new Map());
+  return m.get(kind)!;
+}
+/* ---------- Public KV interface (async) ---------- */
+export async function kvPut(kind: string, id: string, data: unknown): Promise<void> {
+  if (isPostgresAvailable()) {
+    return pgPut(kind, id, data);
+  }
   const now = new Date().toISOString();
   const json = JSON.stringify(data);
   if (sqliteDb) {
@@ -76,36 +72,32 @@ export function kvPut(kind: string, id: string, data: unknown): void {
   }
   memGet(kind).set(id, { id, data: json, updatedAt: now });
 }
-export function kvGet<T = unknown>(kind: string, id: string): T | null {
+export async function kvGet<T = unknown>(kind: string, id: string): Promise<T | null> {
+  if (isPostgresAvailable()) {
+    return pgGet<T>(kind, id);
+  }
   if (sqliteDb) {
     const row = sqliteDb
       .prepare(`SELECT data FROM kv WHERE kind = ? AND id = ?`)
       .get(kind, id) as { data: string } | undefined;
     if (!row) return null;
-    try {
-      return JSON.parse(row.data) as T;
-    } catch {
-      return null;
-    }
+    try { return JSON.parse(row.data) as T; } catch { return null; }
   }
   const row = memGet(kind).get(id);
   if (!row) return null;
-  try {
-    return JSON.parse(row.data) as T;
-  } catch {
-    return null;
-  }
+  try { return JSON.parse(row.data) as T; } catch { return null; }
 }
-export function kvList<T = unknown>(kind: string): T[] {
+export async function kvList<T = unknown>(kind: string): Promise<T[]> {
+  if (isPostgresAvailable()) {
+    return pgList<T>(kind);
+  }
   if (sqliteDb) {
     const rows = sqliteDb
       .prepare(`SELECT data FROM kv WHERE kind = ? ORDER BY updatedAt DESC`)
       .all(kind) as { data: string }[];
     const out: T[] = [];
     for (const r of rows) {
-      try {
-        out.push(JSON.parse(r.data) as T);
-      } catch {}
+      try { out.push(JSON.parse(r.data) as T); } catch {}
     }
     return out;
   }
@@ -114,20 +106,24 @@ export function kvList<T = unknown>(kind: string): T[] {
   );
   const out: T[] = [];
   for (const r of rows) {
-    try {
-      out.push(JSON.parse(r.data) as T);
-    } catch {}
+    try { out.push(JSON.parse(r.data) as T); } catch {}
   }
   return out;
 }
-export function kvDelete(kind: string, id: string): void {
+export async function kvDelete(kind: string, id: string): Promise<void> {
+  if (isPostgresAvailable()) {
+    return pgDelete(kind, id);
+  }
   if (sqliteDb) {
     sqliteDb.prepare(`DELETE FROM kv WHERE kind = ? AND id = ?`).run(kind, id);
     return;
   }
   memGet(kind).delete(id);
 }
-export function kvCount(kind: string): number {
+export async function kvCount(kind: string): Promise<number> {
+  if (isPostgresAvailable()) {
+    return pgCount(kind);
+  }
   if (sqliteDb) {
     const row = sqliteDb
       .prepare(`SELECT COUNT(*) as c FROM kv WHERE kind = ?`)
@@ -136,3 +132,4 @@ export function kvCount(kind: string): number {
   }
   return memGet(kind).size;
 }
+export { isPostgresAvailable };

@@ -7,32 +7,12 @@ export async function GET(req: NextRequest) {
   const format = (searchParams.get("format") || "csv").toLowerCase();
   const status = searchParams.get("status") || "";
   const program = searchParams.get("program") || "";
-  let items = listAll();
+  let items = await listAll();
   if (status) items = items.filter((r) => r.status === status);
   if (program) items = items.filter((r) => r.program === program);
   const stamp = new Date().toISOString().slice(0, 10);
-  if (format === "csv") {
-    const csv = buildCsv(items);
-    return new NextResponse(csv, {
-      headers: {
-        "Content-Type": "text/csv; charset=utf-8",
-        "Content-Disposition": `attachment; filename="dawn-registrations-${stamp}.csv"`,
-        "Cache-Control": "no-store",
-      },
-    });
-  }
-  if (format === "tsv") {
-    const tsv = buildTsv(items);
-    return new NextResponse(tsv, {
-      headers: {
-        "Content-Type": "text/tab-separated-values; charset=utf-8",
-        "Content-Disposition": `attachment; filename="dawn-registrations-${stamp}.tsv"`,
-        "Cache-Control": "no-store",
-      },
-    });
-  }
-  if (format === "json") {
-    return NextResponse.json({ ok: true, items: buildJson(items) });
-  }
+  if (format === "csv") { return new NextResponse(buildCsv(items), { headers: { "Content-Type": "text/csv; charset=utf-8", "Content-Disposition": "attachment; filename=\"dawn-registrations-" + stamp + ".csv\"", "Cache-Control": "no-store" } }); }
+  if (format === "tsv") { return new NextResponse(buildTsv(items), { headers: { "Content-Type": "text/tab-separated-values; charset=utf-8", "Content-Disposition": "attachment; filename=\"dawn-registrations-" + stamp + ".tsv\"", "Cache-Control": "no-store" } }); }
+  if (format === "json") { return NextResponse.json({ ok: true, items: buildJson(items) }); }
   return NextResponse.json({ ok: false, error: "Unknown format" }, { status: 400 });
 }

@@ -1,27 +1,6 @@
-export type StoredFile = {
-  id: string;
-  name: string;
-  size: number;
-  type: string;
-  dataUrl: string;
-  uploadedAt: string;
-};
-declare global {
-  var __dawn_files__: Map<string, StoredFile> | undefined;
-}
-const files: Map<string, StoredFile> =
-  globalThis.__dawn_files__ ?? new Map<string, StoredFile>();
-globalThis.__dawn_files__ = files;
-export function saveFile(f: StoredFile): StoredFile {
-  files.set(f.id, f);
-  return f;
-}
-export function getFile(id: string): StoredFile | undefined {
-  return files.get(id);
-}
-export function deleteFile(id: string): boolean {
-  return files.delete(id);
-}
-export function count(): number {
-  return files.size;
-}
+import { kvPut, kvGet, kvDelete } from "./db";
+export type StoredFile = { id: string; name: string; size: number; type: string; dataUrl: string; uploadedAt: string };
+const KIND = "file";
+export async function saveFile(f: StoredFile): Promise<StoredFile> { await kvPut(KIND, f.id, f); return f; }
+export async function getFile(id: string): Promise<StoredFile | undefined> { return (await kvGet<StoredFile>(KIND, id)) ?? undefined; }
+export async function deleteFile(id: string): Promise<boolean> { const f = await getFile(id); if (!f) return false; await kvDelete(KIND, id); return true; }
