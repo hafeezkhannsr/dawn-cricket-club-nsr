@@ -1,8 +1,6 @@
-import { NextResponse } from "next/server";
-import { SESSION_COOKIE } from "@/lib/auth/session";
-export const dynamic = "force-dynamic";
+import { NextResponse } from 'next/server';
 export async function POST() {
-  const res = NextResponse.json({ ok: true });
-  res.cookies.set(SESSION_COOKIE, "", { maxAge: 0, path: "/" });
-  return res;
+    const response = NextResponse.json({ ok: true, message: 'Logged out' });
+    response.cookies.delete('admin_session');
+    return response;
 }

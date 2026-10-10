@@ -1,38 +1,16 @@
-import { NextRequest, NextResponse } from "next/server";
-import { findByEmail, ensureSeed } from "@/lib/server/user-store";
-import { verifyPassword } from "@/lib/auth/password";
-import { signSession, SESSION_COOKIE, SESSION_MAX_AGE } from "@/lib/auth/session";
-export const dynamic = "force-dynamic";
-export async function POST(req: NextRequest) {
-  await ensureSeed();
-  try {
-    const { email, password } = await req.json();
-    if (!email || !password) {
-      return NextResponse.json({ ok: false, error: "Email and password required" }, { status: 400 });
+import { NextResponse } from 'next/server';
+export async function POST(request: Request) {
+    try {
+        const { email, password } = await request.json();
+        const adminUser = process.env.ADMIN_USERNAME;
+        const adminPass = process.env.ADMIN_PASSWORD;
+        if (email === adminUser && password === adminPass) {
+            const response = NextResponse.json({ ok: true, message: 'Login successful' });
+            response.cookies.set('admin_session', 'true', { httpOnly: true, secure: true, path: '/', maxAge: 60 * 60 * 24 * 7 });
+            return response;
+        }
+        return NextResponse.json({ ok: false, message: 'Invalid credentials' }, { status: 401 });
+    } catch (error) {
+        return NextResponse.json({ ok: false, message: 'Server error' }, { status: 500 });
     }
-    const user = findByEmail(String(email));
-    if (!user) return NextResponse.json({ ok: false, error: "Invalid credentials" }, { status: 401 });
-    const valid = await verifyPassword(String(password), user.passwordHash);
-    if (!valid) return NextResponse.json({ ok: false, error: "Invalid credentials" }, { status: 401 });
-    const token = await signSession({
-      userId: user.id,
-      email: user.email,
-      role: user.role,
-      name: user.name,
-    });
-    const res = NextResponse.json({
-      ok: true,
-      user: { id: user.id, email: user.email, name: user.name, role: user.role },
-    });
-    res.cookies.set(SESSION_COOKIE, token, {
-      httpOnly: true,
-      sameSite: "lax",
-      secure: process.env.NODE_ENV === "production",
-      maxAge: SESSION_MAX_AGE,
-      path: "/",
-    });
-    return res;
-  } catch (e) {
-    return NextResponse.json({ ok: false, error: e instanceof Error ? e.message : "Error" }, { status: 500 });
-  }
 }
