@@ -1,6 +1,12 @@
-import { NextResponse } from 'next/server';
+import { NextResponse } from "next/server";
 export async function POST() {
-    const response = NextResponse.json({ ok: true, message: 'Logged out' });
-    response.cookies.delete('admin_session');
-    return response;
+    const res = NextResponse.json({ ok: true, message: "Logged out" });
+    res.cookies.set("admin_session", "", {
+        httpOnly: true,
+        secure: true,
+        sameSite: "lax",
+        path: "/",
+        maxAge: 0
+    });
+    return res;
 }

@@ -1,10 +1,14 @@
-import { NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
+import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
 export async function GET() {
-    const cookieStore = await cookies();
-    const session = cookieStore.get('admin_session');
-    if (session && session.value === 'true') {
-        return NextResponse.json({ isLoggedIn: true });
+    try {
+        const cookieStore = await cookies();
+        const session = cookieStore.get("admin_session");
+        if (session && session.value === "true") {
+            return NextResponse.json({ isLoggedIn: true });
+        }
+        return NextResponse.json({ isLoggedIn: false }, { status: 401 });
+    } catch (err) {
+        return NextResponse.json({ isLoggedIn: false }, { status: 401 });
     }
-    return NextResponse.json({ isLoggedIn: false }, { status: 401 });
 }
