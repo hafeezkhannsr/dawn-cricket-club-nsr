@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
-import { getUserByEmail, generateUserId } from "@/lib/users/manager";
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 const APP_URL = process.env.NEXT_PUBLIC_URL || "https://dawn-cricket-club-nsr.vercel.app";
+const SCRIPT_URL = process.env.GOOGLE_SCRIPT_URL;
 export async function GET(request: Request) {
     try {
         const { searchParams } = new URL(request.url);
@@ -35,50 +35,51 @@ export async function GET(request: Request) {
         if (!googleUser.email) {
             return NextResponse.redirect(`${APP_URL}/login?error=no_email`);
         }
-        // Check if user already exists
-        const existingUser = await getUserByEmail(googleUser.email);
         // Determine role
         const adminEmail = process.env.ADMIN_USERNAME || "hafeezkhannsr@gmail.com";
         const isAdminUser = googleUser.email === adminEmail;
-        const userRole = existingUser?.Role || (isAdminUser ? "admin" : "user");
-        // NOTE: Writing to Google Sheets requires Apps Script webhook.
-        // For now, we save user info in cookies.
-        // The Apps Script webhook will be added in the next step.
+        const userRole = isAdminUser ? "admin" : "user";
+        const userId = "USR-" + Date.now() + "-" + Math.random().toString(36).substring(2, 8).toUpperCase();
+        // Save to Google Sheet via Webhook
+        if (SCRIPT_URL) {
+            try {
+                await fetch(SCRIPT_URL, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        sheet: "Users",
+                        ID: userId,
+                        Email: googleUser.email,
+                        Name: googleUser.name || "",
+                        Picture: googleUser.picture || "",
+                        Phone: "",
+                        Role: userRole,
+                        Status: "active",
+                        ClubID: "",
+                        CreatedAt: new Date().toISOString(),
+                        LastLogin: new Date().toISOString(),
+                    }),
+                });
+            } catch (webhookErr) {
+                console.error("Webhook error:", webhookErr);
+            }
+        }
+        // Set cookies
         const response = NextResponse.redirect(`${APP_URL}/dashboard`);
-        response.cookies.set("user_email", googleUser.email, {
+        const cookieOptions = {
             httpOnly: true,
             secure: true,
-            sameSite: "lax",
+            sameSite: "lax" as const,
             path: "/",
             maxAge: 60 * 60 * 24 * 7,
-        });
-        response.cookies.set("user_name", googleUser.name || "", {
-            httpOnly: true,
-            secure: true,
-            sameSite: "lax",
-            path: "/",
-            maxAge: 60 * 60 * 24 * 7,
-        });
+        };
+        response.cookies.set("user_email", googleUser.email, cookieOptions);
+        response.cookies.set("user_name", googleUser.name || "", cookieOptions);
+        response.cookies.set("user_role", userRole, cookieOptions);
+        response.cookies.set("user_id", userId, cookieOptions);
         response.cookies.set("user_picture", googleUser.picture || "", {
+            ...cookieOptions,
             httpOnly: false,
-            secure: true,
-            sameSite: "lax",
-            path: "/",
-            maxAge: 60 * 60 * 24 * 7,
-        });
-        response.cookies.set("user_role", userRole, {
-            httpOnly: true,
-            secure: true,
-            sameSite: "lax",
-            path: "/",
-            maxAge: 60 * 60 * 24 * 7,
-        });
-        response.cookies.set("user_id", existingUser?.ID || generateUserId(), {
-            httpOnly: true,
-            secure: true,
-            sameSite: "lax",
-            path: "/",
-            maxAge: 60 * 60 * 24 * 7,
         });
         return response;
     } catch (err) {
