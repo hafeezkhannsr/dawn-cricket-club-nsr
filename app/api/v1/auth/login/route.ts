@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-export async function POST(request) {
+export async function POST(request: Request) {
     try {
         const body = await request.json();
         const email = body.email || body.username || "";
@@ -7,7 +7,17 @@ export async function POST(request) {
         const ADMIN_EMAIL = process.env.ADMIN_USERNAME || "hafeezkhannsr@gmail.com";
         const ADMIN_PASS = process.env.ADMIN_PASSWORD || "DawnClub_2026!";
         if (email === ADMIN_EMAIL && password === ADMIN_PASS) {
-            const res = NextResponse.json({ ok: true, message: "Login successful" });
+            const res = NextResponse.json({ 
+                ok: true, 
+                message: "Login successful",
+                user: {
+                    id: "admin-1",
+                    email: ADMIN_EMAIL,
+                    name: "Administrator",
+                    role: "super_admin",
+                    permissions: ["*"]
+                }
+            });
             res.cookies.set("admin_session", "true", {
                 httpOnly: true, secure: true, sameSite: "lax",
                 path: "/", maxAge: 60 * 60 * 24 * 7
