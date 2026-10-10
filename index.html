@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#042b36">
+  <meta name="description" content="DAWN Cricket Club player registration — Hakimabad, Nowshera, Pakistan.">
+  <title>Player Registration | DAWN Cricket Club (DKK)</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <img class="club-header" src="assets/dkk-header.png" alt="DAWN Cricket Club — Play, Learn, Grow">
+  </header>
+
+  <main class="page-shell">
+    <section class="form-card" aria-labelledby="form-title">
+      <nav class="steps" aria-label="Registration steps">
+        <span class="step active"><b>1</b><span>Personal Info</span></span>
+        <span class="step"><b>2</b><span>Location</span></span>
+        <span class="step"><b>3</b><span>Cricket Profile</span></span>
+        <span class="step"><b>4</b><span>Review</span></span>
+      </nav>
+
+      <div class="intro">
+        <div class="intro-icon" aria-hidden="true">♟</div>
+        <div>
+          <h1 id="form-title">Player Registration Form</h1>
+          <p>Register with DAWN Cricket Club. Keep your details ready — it only takes a few minutes.</p>
+        </div>
+      </div>
+
+      <form id="registrationForm">
+        <section class="form-section">
+          <h2>Personal Information</h2>
+          <div class="fields two">
+            <label>Full Name <em>*</em>
+              <input name="fullName" type="text" placeholder="ENTER FULL NAME" autocomplete="name" required maxlength="80">
+            </label>
+            <label>Father / Guardian Name <em>*</em>
+              <input name="guardianName" type="text" placeholder="ENTER FATHER / GUARDIAN NAME" required maxlength="80">
+            </label>
+            <label>CNIC / B-Form Number <em>*</em>
+              <input id="identity" name="identity" type="text" inputmode="numeric" placeholder="XXXXX-XXXXXXX-X" required>
+              <small>Use CNIC for adults or B-Form for under-18 players.</small>
+            </label>
+            <label>Date of Birth <em>*</em>
+              <input name="dob" type="date" required>
+            </label>
+            <label>Email Address
+              <input name="email" type="email" placeholder="name@example.com" autocomplete="email">
+            </label>
+            <label>Mobile Number <em>*</em>
+              <div class="phone-field"><span>🇵🇰 +92</span><input name="phone" type="tel" inputmode="numeric" placeholder="3XXXXXXXXX" pattern="3[0-9]{9}" required aria-label="Pakistan mobile number without +92"></div>
+              <small>Enter 10 digits starting with 3, without +92.</small>
+            </label>
+            <label>Gender <em>*</em>
+              <select name="gender" required><option value="">Select gender</option><option>Male</option><option>Female</option><option>Prefer not to say</option></select>
+            </label>
+            <label>Birth Place
+              <input name="birthPlace" type="text" placeholder="CITY / TOWN">
+            </label>
+          </div>
+        </section>
+
+        <section class="form-section location-section">
+          <div class="section-heading">
+            <span class="pin" aria-hidden="true">⌖</span>
+            <div><h2>Pakistan Location Details</h2><p>Choose each level in order. The next list updates based on your selection.</p></div>
+          </div>
+          <div class="fields three">
+            <label>Province / Territory <em>*</em>
+              <select id="province" name="province" required><option value="">Select province / territory</option></select>
+            </label>
+            <label>Division <em>*</em>
+              <select id="division" name="division" required disabled><option value="">Select division</option></select>
+            </label>
+            <label>District <em>*</em>
+              <select id="district" name="district" required disabled><option value="">Select district</option></select>
+            </label>
+            <label>Tehsil / Taluka
+              <select id="tehsil" name="tehsil" disabled><option value="">Select tehsil</option></select>
+            </label>
+            <label>Union Council
+              <select id="uc" name="uc" disabled><option value="">Select union council</option></select>
+            </label>
+            <label>Village / Neighbourhood
+              <select id="village" name="village" disabled><option value="">Select village / neighbourhood</option></select>
+            </label>
+          </div>
+          <p class="data-note"><strong>Location data note:</strong> The included JavaScript has starter examples to demonstrate cascading behaviour, not a complete official gazetteer. Replace or extend <code>locationData</code> with a verified current Pakistan administrative dataset before using this for official registrations. Names and boundaries can change.</p>
+        </section>
+
+        <section class="form-section">
+          <h2>Cricket Profile</h2>
+          <div class="fields three">
+            <label>Player Role <em>*</em>
+              <select name="role" required><option value="">Select role</option><option>Batter</option><option>Bowler</option><option>All-rounder</option><option>Wicketkeeper-batter</option></select>
+            </label>
+            <label>Batting Style
+              <select name="batting"><option value="">Select style</option><option>Right-hand bat</option><option>Left-hand bat</option></select>
+            </label>
+            <label>Bowling Style
+              <select name="bowling"><option value="">Select style</option><option>Right-arm fast</option><option>Left-arm fast</option><option>Right-arm medium</option><option>Left-arm medium</option><option>Right-arm off-spin</option><option>Left-arm orthodox</option><option>Leg-spin</option><option>Does not bowl</option></select>
+            </label>
+            <label>Previous Club / School
+              <input name="previousClub" type="text" placeholder="OPTIONAL">
+            </label>
+            <label>Emergency Contact
+              <input name="emergency" type="tel" inputmode="numeric" placeholder="03XXXXXXXXX">
+            </label>
+            <label>Home Address
+              <input name="address" type="text" placeholder="VILLAGE / STREET, CITY">
+            </label>
+          </div>
+        </section>
+
+        <section class="form-section">
+          <h2>Documents & Consent</h2>
+          <div class="fields two">
+            <label class="upload-field">Player Photo <em>*</em>
+              <input id="playerPhoto" name="playerPhoto" type="file" accept="image/jpeg,image/png,image/webp" required>
+              <span class="upload-hint">Choose a clear JPG, PNG or WebP image (max 2 MB).</span>
+            </label>
+            <label class="upload-field">CNIC / B-Form Front (optional)
+              <input name="idFront" type="file" accept="image/jpeg,image/png,application/pdf">
+              <span class="upload-hint">Image or PDF, if requested by the club.</span>
+            </label>
+            <label class="upload-field">CNIC / B-Form Back (optional)
+              <input name="idBack" type="file" accept="image/jpeg,image/png,application/pdf">
+              <span class="upload-hint">Image or PDF, if requested by the club.</span>
+            </label>
+          </div>
+          <label class="consent"><input type="checkbox" name="consent" required> I confirm that the information supplied is accurate and consent to the club contacting me about registration. <em>*</em></label>
+        </section>
+
+        <div class="form-actions">
+          <p id="status" role="status" aria-live="polite">Required fields are marked with <em>*</em>.</p>
+          <button type="reset" class="btn secondary">Clear Form</button>
+          <button type="submit" class="btn primary">Review Registration <span aria-hidden="true">→</span></button>
+        </div>
+      </form>
+    </section>
+
+    <aside class="side-card">
+      <div class="photo-frame">
+        <div class="photo-placeholder" id="photoPreview" aria-label="Player photo preview">
+          <span class="camera" aria-hidden="true">◎</span>
+          <strong>PLAYER PHOTO</strong>
+          <span>Upload a recent, clear photo</span>
+        </div>
+      </div>
+      <div class="guidelines">
+        <h3>Photo Guidelines</h3>
+        <ul><li>JPG, PNG or WebP</li><li>Maximum file size: 2 MB</li><li>Face clearly visible</li><li>Plain background recommended</li></ul>
+      </div>
+      <blockquote>“Discipline Builds Champions”</blockquote>
+      <div class="club-values">
+        <div><span>🏆</span><b>Fair Play</b></div><div><span>📈</span><b>Skill Development</b></div>
+        <div><span>🤝</span><b>Teamwork</b></div><div><span>🌟</span><b>Bright Future</b></div>
+      </div>
+    </aside>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-brand"><strong>DAWN CRICKET CLUB <span>(DKK)</span></strong><small>PLAY&nbsp; | &nbsp;LEARN&nbsp; | &nbsp;GROW</small></div>
+    <p>Hakimabad, Nowshera, Khyber Pakhtunkhwa, Pakistan</p>
+    <p class="developer">Designed &amp; Developed by <strong>Hafeez ur Rehman Khan</strong></p>
+  </footer>
+
+  <dialog id="reviewDialog" class="review-dialog">
+    <form method="dialog" class="dialog-head"><h2>Review Your Registration</h2><button class="close" aria-label="Close review">×</button></form>
+    <div id="reviewContent" class="review-content"></div>
+    <div class="dialog-actions"><button id="editBtn" class="btn secondary" type="button">← Edit Details</button><button id="downloadBtn" class="btn primary" type="button">Download Summary</button></div>
+    <p class="local-note">Demo mode: this page previews and validates your details in your browser. It does not submit data to a server or save an official registration.</p>
+  </dialog>
+  <script src="script.js"></script>
+</body>
+</html>

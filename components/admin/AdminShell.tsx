@@ -39,6 +39,10 @@ const NAV_SECTIONS = [
 export default function AdminShell({ children, title, subtitle }: { children: React.ReactNode; title: string; subtitle?: string }) {
   const pathname = usePathname();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const handleLogout = async () => {
+    await fetch('/api/v1/auth/logout', { method: 'POST' });
+    window.location.href = '/';
+  };
   return (
     <div style={{ minHeight: "100vh", background: "#030a18", color: "#eef4fb", display: "flex", flexDirection: "column" }}>
       {/* TOP BAR */}
@@ -72,9 +76,7 @@ export default function AdminShell({ children, title, subtitle }: { children: Re
           <Link href="/" className="btn btn-outline" style={{ fontSize: ".75rem", padding: ".4rem .75rem" }}>
             <span className="hide-xs">← Site</span>
           </Link>
-          <form action="/api/v1/auth/logout" method="POST">
-            <button type="submit" className="btn btn-primary" style={{ fontSize: ".75rem", padding: ".4rem .75rem" }}>Logout</button>
-          </form>
+          <button onClick={handleLogout} className="btn btn-primary" style={{ fontSize: ".75rem", padding: ".4rem .75rem" }}>Logout</button>
         </div>
       </header>
       <div style={{ display: "flex", flex: 1, position: "relative" }}>
