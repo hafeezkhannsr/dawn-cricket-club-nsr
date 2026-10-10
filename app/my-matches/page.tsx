@@ -33,7 +33,7 @@ export default function MyMatchesPage() {
     return (
         <div style={{ minHeight: "100vh", background: "#030a18", color: "#eef4fb", padding: "2rem" }}>
             <div style={{ maxWidth: 1000, margin: "0 auto" }}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "2rem" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "2rem", flexWrap: "wrap", gap: "1rem" }}>
                     <div>
                         <a href="/dashboard" style={{ color: "#f0b429", textDecoration: "none", fontSize: ".9rem" }}>
                             ← Back to Dashboard
@@ -96,7 +96,7 @@ export default function MyMatchesPage() {
                                 }}
                             >
                                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "1rem" }}>
-                                    <div>
+                                    <div style={{ flex: 1, minWidth: 200 }}>
                                         <h3 style={{ margin: 0, fontSize: "1.25rem" }}>
                                             {m.TeamA} <span style={{ color: "#f0b429" }}>vs</span> {m.TeamB}
                                         </h3>
@@ -107,19 +107,36 @@ export default function MyMatchesPage() {
                                             {m.Date} {m.Time && `• ${m.Time}`}
                                         </p>
                                     </div>
-                                    <span
-                                        style={{
-                                            padding: ".35rem .75rem",
-                                            borderRadius: "999px",
-                                            background: statusColor(m.Status) + "22",
-                                            color: statusColor(m.Status),
-                                            fontSize: ".75rem",
-                                            fontWeight: 700,
-                                            textTransform: "uppercase",
-                                        }}
-                                    >
-                                        {m.Status || "upcoming"}
-                                    </span>
+                                    <div style={{ display: "flex", gap: ".5rem", alignItems: "center", flexWrap: "wrap" }}>
+                                        <span
+                                            style={{
+                                                padding: ".35rem .75rem",
+                                                borderRadius: "999px",
+                                                background: statusColor(m.Status) + "22",
+                                                color: statusColor(m.Status),
+                                                fontSize: ".75rem",
+                                                fontWeight: 700,
+                                                textTransform: "uppercase",
+                                            }}
+                                        >
+                                            {m.Status || "upcoming"}
+                                        </span>
+                                        <a
+                                            href={`/squad-builder?matchId=${m.ID}&team=${encodeURIComponent(m.TeamA)}`}
+                                            style={{
+                                                padding: ".5rem 1rem",
+                                                background: "rgba(240,180,41,.15)",
+                                                color: "#f0b429",
+                                                border: "1px solid rgba(240,180,41,.3)",
+                                                borderRadius: ".5rem",
+                                                textDecoration: "none",
+                                                fontSize: ".85rem",
+                                                fontWeight: 600,
+                                            }}
+                                        >
+                                            Build Squad
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         ))}
