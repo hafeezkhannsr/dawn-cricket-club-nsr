@@ -7,10 +7,6 @@ export async function getUserByEmail(email: string) {
     const users = await getAllUsers();
     return users.find((u: any) => u.Email === email);
 }
-export async function getUserById(id: string) {
-    const users = await getAllUsers();
-    return users.find((u: any) => u.ID === id);
-}
 export function isAdmin(user: any): boolean {
     return user && user.Role === "admin";
 }

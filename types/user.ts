@@ -10,7 +10,3 @@ export interface User {
     createdAt: string;
     lastLogin?: string;
 }
-export interface UserSession {
-    user: User;
-    expiresAt: number;
-}
