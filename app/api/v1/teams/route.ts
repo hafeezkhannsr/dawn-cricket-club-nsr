@@ -1,3 +1,6 @@
-import { NextResponse } from 'next/server';
-export async function GET() { return NextResponse.json({ ok: true, teams: [] }); }
-export async function POST(request: Request) { const b = await request.json(); return NextResponse.json({ ok: true, data: b }); }
+import { NextResponse } from "next/server";
+import { readSheet } from "@/lib/sheets";
+export async function GET() {
+    try { const teams = await readSheet("Teams"); return NextResponse.json({ ok: true, teams: teams }); }
+    catch { return NextResponse.json({ ok: false, message: "Failed" }, { status: 500 }); }
+}
