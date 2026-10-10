@@ -1,0 +1,1 @@
+export interface Player { id: string; name: string; fatherName?: string; cnic?: string; dob?: string; phone?: string; email?: string; address?: string; photoUrl?: string; teamId?: string; role?: string; status?: string; registeredAt?: string; }

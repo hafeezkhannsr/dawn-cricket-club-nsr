@@ -1,0 +1,1 @@
+export function generateCommentary(b: any): string { if (b.isWicket) return 'OUT! '+(b.batsman||'Batsman')+' '+(b.wicketType||'dismissed'); if (b.runs===6) return 'SIX!'; if (b.runs===4) return 'FOUR!'; if (b.runs===0) return 'Dot ball.'; return b.runs+' run'+(b.runs>1?'s':''); }

@@ -1,0 +1,2 @@
+export interface MatchResult { winner: string|null; margin: string; isTie: boolean; isDraw: boolean; }
+export function determineResult(aR: number, bR: number, aW: number, bW: number, aN: string, bN: string): MatchResult { if (aR>bR) return { winner:aN, margin:(aR-bR)+' runs', isTie:false, isDraw:false }; if (bR>aR) return { winner:bN, margin:(10-bW)+' wickets', isTie:false, isDraw:false }; return { winner:null, margin:'Match tied', isTie:true, isDraw:false }; }
