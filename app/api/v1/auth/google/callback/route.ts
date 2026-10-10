@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { readSheet } from "@/lib/sheets";
+import { getUserByEmail, generateUserId } from "@/lib/users/manager";
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 const APP_URL = process.env.NEXT_PUBLIC_URL || "https://dawn-cricket-club-nsr.vercel.app";
@@ -35,11 +35,15 @@ export async function GET(request: Request) {
         if (!googleUser.email) {
             return NextResponse.redirect(`${APP_URL}/login?error=no_email`);
         }
-        // Check if user is admin
+        // Check if user already exists
+        const existingUser = await getUserByEmail(googleUser.email);
+        // Determine role
         const adminEmail = process.env.ADMIN_USERNAME || "hafeezkhannsr@gmail.com";
         const isAdminUser = googleUser.email === adminEmail;
-        // Save user to Google Sheet (optional - we will add later)
-        // For now, just set session cookie
+        const userRole = existingUser?.Role || (isAdminUser ? "admin" : "user");
+        // NOTE: Writing to Google Sheets requires Apps Script webhook.
+        // For now, we save user info in cookies.
+        // The Apps Script webhook will be added in the next step.
         const response = NextResponse.redirect(`${APP_URL}/dashboard`);
         response.cookies.set("user_email", googleUser.email, {
             httpOnly: true,
@@ -62,7 +66,14 @@ export async function GET(request: Request) {
             path: "/",
             maxAge: 60 * 60 * 24 * 7,
         });
-        response.cookies.set("user_role", isAdminUser ? "admin" : "user", {
+        response.cookies.set("user_role", userRole, {
+            httpOnly: true,
+            secure: true,
+            sameSite: "lax",
+            path: "/",
+            maxAge: 60 * 60 * 24 * 7,
+        });
+        response.cookies.set("user_id", existingUser?.ID || generateUserId(), {
             httpOnly: true,
             secure: true,
             sameSite: "lax",
